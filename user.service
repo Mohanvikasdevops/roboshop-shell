@@ -7,7 +7,7 @@ Environment=MONGO=true
 Environment=REDIS_URL='redis://redis.109v.store:6379'
 Environment=MONGO_URL="mongodb://mongodb.109v.store:27017/users"
 // highlight-end
-ExecStart=/usr/bin/node /app/server.js
+ExecStart=/bin/node /app/server.js
 SyslogIdentifier=user
 
 [Install]
