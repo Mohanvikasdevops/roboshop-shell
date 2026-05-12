@@ -12,7 +12,7 @@ MONGODB_HOST=mongodb.109v.store
 
 mkdir -p $LOGS_FOLDER
 
-if [ $cartID -ne 0 ]; then  
+if [ $USERID -ne 0 ]; then  
     echo -e "$R Please run this script with root cart access $N" | tee -a $LOGS_FILE
     exit 1
 fi
