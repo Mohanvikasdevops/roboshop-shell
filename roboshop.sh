@@ -5,16 +5,15 @@ AMI_ID="ami-0220d79f3f480ecf5"
 
 for instance in $@
 do
-    INSTANCE_ID=$(aws ec2 run-instances \
+    INSTANCE_ID=$( aws ec2 run-instances \
     --image-id $AMI_ID \
-    --count 1 \
     --instance-type "t3.micro" \
     --security-group-ids $SG_ID \
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance},{Key=Env,Value=dev}]" \
     --query 'Instances[0].InstanceId'\
     --output text )
 
-    if [ "$instance" == "frontend"]; then
+    if [ "$instance" == "frontend" ]; then
         IP=$(
             aws ec2 describe-instances \
             --instance-ids $INSTANCE_ID \
