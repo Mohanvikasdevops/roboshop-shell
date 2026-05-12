@@ -39,8 +39,8 @@ VALIDATE $? "Installing nodejs server"
 
 id roboshop &>>$LOGS_FILE
 if [ $? -ne 0 ]; then
-    cartadd --system --home /app --shell /sbin/nologin --comment "roboshop system cart" roboshop &>>$LOGS_FILE
-    VALIDATE $? "creating system cart"  
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOGS_FILE
+    VALIDATE $? "creating system user"  
 else
     echo -e "Roboshop cart already exist ... $Y skipping $N"
 fi
