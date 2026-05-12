@@ -14,7 +14,7 @@ Environment=AMQP_HOST=rabbitmq.109v.store
 Environment=AMQP_USER=roboshop
 Environment=AMQP_PASS=roboshop123
 
-ExecStart=/usr/bin/uwsgi --ini payment.ini
+ExecStart=/usr/local/bin/uwsgi --ini payment.ini
 ExecStop=/bin/kill -9 $MAINPID
 SyslogIdentifier=payment
 
