@@ -2,6 +2,8 @@
 
 SG_ID="sg-0e66d214224c13c30"
 AMI_ID="ami-0220d79f3f480ecf5"
+ZONE_ID="Z0083399250TNJ8GZUJYI"
+DOMAIN_NAME="109v.store"
 
 for instance in $@
 do
@@ -20,6 +22,7 @@ do
             --query 'Reservations[].Instances[].PublicIpAddress' \
             --output text
         )
+        RECORD_NAME="$DOMAIN_NAME" # 109v.store
     else
         IP=$(
             aws ec2 describe-instances \
@@ -27,7 +30,35 @@ do
             --query 'Reservations[].Instances[].PrivateIpAddress' \
             --output text
         )
+        RECORD_NAME="$instance.$DOMAIN_NAME" # mongodb.109v.store
     fi
 
+
     echo "IP Address: $IP"
+
+    aws route53 change-resource-record-sets \
+    --hosted-zone-id $ZONE_ID \
+    --change-batch 
+    {
+        "Comment": "Updating record",
+        "Changes": [
+            {
+            "Action": "UPSERT",
+            "ResourceRecordSet": {
+                "Name": "'$RECORD_NAME'",
+                "Type": "A",
+                "TTL": 1,
+                "ResourceRecords": [
+                {
+                    "Value": "'$IP'"
+                }
+                ]
+            }
+            }
+        ]
+    }
+
+    echo "record updated for $instance"
+
+
 done
