@@ -39,10 +39,10 @@ sed -i 's/127.0.0.1/0.0.0.0/g' /etc/redis/redis.conf &>>$LOGS_FILE
 sed -i 's/protected-mode yes/protected-mode no/g' /etc/redis/redis.conf &>>$LOGS_FILE
 VALIDATE $? "Allowing remote connections"
 
-systemctl enable mongod &>>$LOGS_FILE
+systemctl enable redis &>>$LOGS_FILE
 VALIDATE $? "Enable redis"
 
-systemctl start mongod &>>$LOGS_FILE
+systemctl start redis &>>$LOGS_FILE
 VALIDATE $? "start redis"
 
 
