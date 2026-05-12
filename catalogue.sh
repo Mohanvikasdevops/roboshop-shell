@@ -66,7 +66,7 @@ VALIDATE $? "Installing dependencies"
 cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service &>>$LOGS_FILE
 VALIDATE $? "Created  systemctl service"
 
-systemctl daemon-reload catalogue &>>$LOGS_FILE
+systemctl daemon-reload  &>>$LOGS_FILE
 systemctl enable catalogue &>>$LOGS_FILE
 systemctl start catalogue &>>$LOGS_FILE
 VALIDATE $? "start and enable catalogue"
@@ -86,7 +86,7 @@ else
    echo -e "Products already loaded ... $Y skipping $N"
 fi
 
-systemctl restart Catalogue &>>$LOGS_FILE
+systemctl restart catalogue &>>$LOGS_FILE
 VALIDATE $? "Restarted Catalogue"
 
 show dbs
