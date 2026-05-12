@@ -67,19 +67,23 @@ VALIDATE $? "Moving shipping jar"
 cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service &>>$LOGS_FILE
 VALIDATE $? "Created  systemctl service"
 
-
-dnf install mysql -y &>>$LOGS_FILE
-VALIDATE $? "Installing mysql server"
-
-mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOGS_FILE
-mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/app-user.sql  &>>$LOGS_FILE
-mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOGS_FILE
-VALIDATE $? "Setting Root Password"
+systemctl daemon-reload &>>$LOGS_FILE
+VALIDATE $? "Loading"
 
 systemctl enable shipping &>>$LOGS_FILE
 systemctl start shipping &>>$LOGS_FILE
 VALIDATE $? "start and enable shipping"
 
+dnf install mysql -y &>>$LOGS_FILE
+VALIDATE $? "Installing mysql Client"
+
+mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOGS_FILE
+mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/app-user.sql  &>>$LOGS_FILE
+mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOGS_FILE
+VALIDATE $? "Loading MySQL Schemas"
+
+systemctl restart shipping &>>$LOGS_FILE
+VALIDATE $? "Final Restart of Shipping"
 
 
 
