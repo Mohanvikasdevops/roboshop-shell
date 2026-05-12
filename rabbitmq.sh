@@ -27,20 +27,33 @@ VALIDATE() {
     fi
 }
 
+# 1. Clean cache and copy repo
+dnf clean all &>>$LOGS_FILE
 cp $SCRIPT_DIR/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo &>>$LOGS_FILE
 VALIDATE $? "Copying rabbitmq Repo"
+
+# 2. INSTALL SOCAT (Crucial step)
+dnf install socat -y &>>$LOGS_FILE
+VALIDATE $? "Installing socat dependency"
 
 dnf install rabbitmq-server -y &>>$LOGS_FILE
 VALIDATE $? "Installing rabbitmq server"
 
 systemctl enable rabbitmq-server &>>$LOGS_FILE
-VALIDATE $? "Enable rabbitmq-server"
-
 systemctl start rabbitmq-server &>>$LOGS_FILE
 VALIDATE $? "start rabbitmq-server"
 
 
-rabbitmqctl add_user roboshop roboshop123 &>>$LOGS_FILE
+# 5. Add User (with existence check)
+rabbitmqctl list_users | grep -q roboshop
+if [ $? -ne 0 ]; then
+    rabbitmqctl add_user roboshop roboshop123 &>>$LOGS_FILE
+    VALIDATE $? "Adding roboshop user"
+else
+    echo -e "roboshop user already exists ... $Y skipping $N"
+fi
+
+# 6. Set Permissions
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>$LOGS_FILE
 VALIDATE $? "Setting user permissions"
 
