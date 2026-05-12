@@ -74,9 +74,9 @@ VALIDATE $? "start and enable shipping"
 dnf install mysql -y &>>$LOGS_FILE
 VALIDATE $? "Installing mysql server"
 
-mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOGS_FILE
-mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/db/app-user.sql  &>>$LOGS_FILE
-mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOGS_FILE
+mysql -h mysql.109v.store -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOGS_FILE
+mysql -h mysql.109v.store -uroot -pRoboShop@1 < /app/db/app-user.sql  &>>$LOGS_FILE
+mysql -h mysql.109v.store -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOGS_FILE
 VALIDATE $? "Setting Root Password"
 
 systemctl restart shipping &>>$LOGS_FILE
