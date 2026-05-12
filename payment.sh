@@ -39,22 +39,23 @@ else
     echo -e "Roboshop user already exist ... $Y skipping $N"
 fi
 
-mkdir -p /app 
+mkdir -p /app &>>$LOGS_FILE
 VALIDATE $? "creating app directory"
 
 curl -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip &>>$LOGS_FILE
 VALIDATE $? "Downloading payment code"
 
-cd /app 
+cd /app &>>$LOGS_FILE
 VALIDATE $? "Moving to app directory"
 
-rm -rf /app/*
+rm -rf /app/* &>>$LOGS_FILE
 VALIDATE $? "Removing existing code"
 
-unzip /tmp/payment.zip
+unzip /tmp/payment.zip &>>$LOGS_FILE
 VALIDATE $? "Unzip payment code"
 
-pip3 install -r requirements.txt
+cd /app 
+pip3 install -r requirements.txt &>>$LOGS_FILE
 VALIDATE $? "Installing dependencies"
 
 cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service &>>$LOGS_FILE
