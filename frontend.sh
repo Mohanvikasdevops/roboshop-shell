@@ -45,12 +45,13 @@ rm -rf /usr/share/nginx/html/*
 curl -o /tmp/frontend.zip https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip &>>$LOGS_FILE
 VALIDATE $? "Downloading frontend code"
 
-cd /usr/share/nginx/html 
-unzip /tmp/frontend.zip
+cd /usr/share/nginx/html &>>$LOGS_FILE
+unzip /tmp/frontend.zip &>>$LOGS_FILE
 VALIDATE $? "Moving to app directory"
 
+rm -rf /etc/nginx/nginx.conf &>>$LOGS_FILE
 cp $SCRIPT_DIR/nginx.conf  /etc/nginx/nginx.conf &>>$LOGS_FILE
-VALIDATE $? "Created  systemctl service"
+VALIDATE $? "Created nginx conf file"
 
 systemctl restart nginx &>>$LOGS_FILE
 VALIDATE $? "Restarted nginx"
