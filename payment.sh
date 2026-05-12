@@ -28,7 +28,7 @@ VALIDATE() {
     fi
 }
  
-dnf install python3n gcc python3-devel -y &>>$LOGS_FILE
+dnf install python3 gcc python3-devel -y &>>$LOGS_FILE
 VALIDATE $? "Installing python server"
 
 id roboshop &>>$LOGS_FILE
