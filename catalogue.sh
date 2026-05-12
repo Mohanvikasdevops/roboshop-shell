@@ -89,10 +89,7 @@ fi
 systemctl restart catalogue &>>$LOGS_FILE
 VALIDATE $? "Restarted Catalogue"
 
-show dbs
-use catalogue
-show collections
-db.products.find()
+
 
 
 
