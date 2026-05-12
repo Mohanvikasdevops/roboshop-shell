@@ -9,6 +9,7 @@ Y="\e[33m"
 N="\e[0m"
 SCRIPT_DIR=$PWD
 MONGODB_HOST=mongodb.109v.store
+MYSQL_HOST=mysql.109v.store
 
 mkdir -p $LOGS_FOLDER
 
@@ -66,18 +67,19 @@ VALIDATE $? "Moving shipping jar"
 cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service &>>$LOGS_FILE
 VALIDATE $? "Created  systemctl service"
 
-systemctl daemon-reload  &>>$LOGS_FILE
-systemctl enable shipping &>>$LOGS_FILE
-systemctl start shipping &>>$LOGS_FILE
-VALIDATE $? "start and enable shipping"
 
 dnf install mysql -y &>>$LOGS_FILE
 VALIDATE $? "Installing mysql server"
 
-mysql -h mysql.109v.store -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOGS_FILE
-mysql -h mysql.109v.store -uroot -pRoboShop@1 < /app/db/app-user.sql  &>>$LOGS_FILE
-mysql -h mysql.109v.store -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOGS_FILE
+mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOGS_FILE
+mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/app-user.sql  &>>$LOGS_FILE
+mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOGS_FILE
 VALIDATE $? "Setting Root Password"
+
+systemctl daemon-reload  &>>$LOGS_FILE
+systemctl enable shipping &>>$LOGS_FILE
+systemctl start shipping &>>$LOGS_FILE
+VALIDATE $? "start and enable shipping"
 
 systemctl restart shipping &>>$LOGS_FILE
 VALIDATE $? "Restarted shipping"
