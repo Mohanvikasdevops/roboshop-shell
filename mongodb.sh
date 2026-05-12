@@ -8,12 +8,13 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
+mkdir -p $LOGS_FOLDER
+
 if [ $USERID -ne 0 ]; then  
     echo -e "$R Please run this script with root user access $N" | tee -a $LOGS_FILE
     exit 1
 fi
 
-mkdir -p $LOGS_FOLDER
 
 #By default shell will not execute, only executed when called
 VALIDATE() {
