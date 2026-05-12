@@ -39,7 +39,7 @@ else
     echo -e "Roboshop user already exist ... $Y skipping $N"
 fi
 
-mkdir -p /app 
+mkdir -p /app &>>$LOGS_FILE
 VALIDATE $? "creating app directory"
 
 curl -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip &>>$LOGS_FILE
@@ -51,11 +51,17 @@ VALIDATE $? "Moving to app directory"
 rm -rf /app/*
 VALIDATE $? "Removing existing code"
 
-unzip /tmp/shipping.zip
+unzip /tmp/shipping.zip &>>$LOGS_FILE
 VALIDATE $? "Unzip shipping code"
 
-mvn clean package 
+mvn clean package &>>$LOGS_FILE
 VALIDATE $? "Cleaning Package"
+
+
+# Move the jar file from target to /app (wildcard helps if version changes)
+mv target/shipping-*.jar /app/shipping.jar &>>$LOGS_FILE
+VALIDATE $? "Moving shipping jar"
+
 
 cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service &>>$LOGS_FILE
 VALIDATE $? "Created  systemctl service"
